@@ -1,0 +1,101 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #222;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.game-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.main-content {
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+}
+
+/* Zone Vidéo */
+.canvas-wrapper {
+    position: relative;
+    width: 480px; /* Réduit un peu pour laisser place au jeu */
+    height: 360px;
+    border: 5px solid #444;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: #000;
+}
+
+video {
+    transform: scaleX(-1);
+    visibility: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 480px;
+    height: 360px;
+}
+
+canvas {
+    transform: scaleX(-1);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 480px;
+    height: 360px;
+}
+
+/* Zone Échiquier */
+#chessboard {
+    display: grid;
+    grid-template-columns: repeat(8, 60px);
+    grid-template-rows: repeat(8, 60px);
+    border: 10px solid #5d4037;
+    user-select: none;
+}
+
+.square {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 40px;
+    cursor: default;
+}
+
+.white {
+    background-color: #f0d9b5;
+    color: black;
+}
+
+.black {
+    background-color: #b58863;
+    color: black;
+}
+
+/* Curseur de sélection */
+.selected {
+    box-shadow: inset 0 0 0 5px #00d2ff; /* Cadre bleu cyan */
+}
+
+/* Pièce sélectionnée (en main) */
+.piece-held {
+    background-color: rgba(0, 210, 255, 0.5) !important;
+}
+
+/* Info Debug */
+#debug-info {
+    margin-top: 15px;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #00d2ff;
+    text-align: center;
+}

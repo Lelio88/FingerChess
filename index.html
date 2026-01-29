@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeu IA - R602</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Importation des librairies via CDN (TensorFlow.js + Handpose + Fingerpose) -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/handpose"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fingerpose"></script>
+</head>
+<body>
+
+    <div class="game-container">
+        <h1>Jeu d'Échecs IA</h1>
+        
+        <div class="main-content">
+            <div class="canvas-wrapper">
+                <!-- La vidéo est cachée, on dessine tout sur le canvas -->
+                <video id="webcam" autoplay playsinline muted></video>
+                <canvas id="output"></canvas>
+            </div>
+
+            <div id="chessboard">
+                <!-- Les cases seront générées par JS -->
+            </div>
+        </div>
+
+        <div id="debug-info">
+            Initialisation...
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
+    <script src="gestures.js"></script>
+    <script src="chess_ui.js"></script>
+    <script src="logic.js"></script>
+</body>
+</html>
