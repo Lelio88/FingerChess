@@ -69,10 +69,35 @@ IndexRightGesture.addDirection(Finger.Index, FingerDirection.DiagonalDownRight, 
     IndexRightGesture.addCurl(finger, FingerCurl.HalfCurl, 1.0);
 });
 
+// --- Geste : Main Ouverte (Cancel / Reset) ---
+const OpenHandGesture = new GestureDescription('open_hand');
+
+// Pouce : Doit être tendu, mais direction libre (souvent sur le côté)
+OpenHandGesture.addCurl(Finger.Thumb, FingerCurl.NoCurl, 1.0);
+
+// Autres doigts : Tendus, direction générale vers le haut (avec tolérance diagonales)
+[Finger.Index, Finger.Middle, Finger.Ring, Finger.Pinky].forEach(finger => {
+    OpenHandGesture.addCurl(finger, FingerCurl.NoCurl, 1.0);
+    OpenHandGesture.addDirection(finger, FingerDirection.VerticalUp, 1.0);
+    OpenHandGesture.addDirection(finger, FingerDirection.DiagonalUpLeft, 0.9);
+    OpenHandGesture.addDirection(finger, FingerDirection.DiagonalUpRight, 0.9);
+});
+
+// --- Geste : Poing Fermé (Valider / Saisir) ---
+const ClosedFistGesture = new GestureDescription('closed_fist');
+
+// Tous les doigts doivent être pliés (FullCurl)
+[Finger.Thumb, Finger.Index, Finger.Middle, Finger.Ring, Finger.Pinky].forEach(finger => {
+    ClosedFistGesture.addCurl(finger, FingerCurl.FullCurl, 1.0);
+    ClosedFistGesture.addCurl(finger, FingerCurl.HalfCurl, 0.5); // Tolérance
+});
+
 // Export des gestes pour utilisation dans logic.js
 window.CustomGestures = {
     IndexUpGesture,
     IndexDownGesture,
     IndexLeftGesture,
-    IndexRightGesture
+    IndexRightGesture,
+    OpenHandGesture,
+    ClosedFistGesture
 };

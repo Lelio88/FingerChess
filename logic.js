@@ -50,11 +50,12 @@ async function loadHandpose() {
 
     // Initialiser le reconnaisseur de gestes avec nos gestes customs + ThumbsUp
     const GE = new fp.GestureEstimator([
-        fp.Gestures.ThumbsUpGesture,
+        window.CustomGestures.ClosedFistGesture,
         window.CustomGestures.IndexUpGesture,
         window.CustomGestures.IndexDownGesture,
         window.CustomGestures.IndexLeftGesture,
-        window.CustomGestures.IndexRightGesture
+        window.CustomGestures.IndexRightGesture,
+        window.CustomGestures.OpenHandGesture
     ]);
 
     title.innerText = "✅ Prêt ! Modèle MediaPipe Hands v2 chargé.";
@@ -117,7 +118,7 @@ async function main() {
 
     // Variables pour le Cooldown (anti-spam de gestes)
     let lastActionTime = 0;
-    const COOLDOWN_DELAY = 600; // ms (Réduit pour plus de réactivité)
+    const COOLDOWN_DELAY = 800; // ms (Réduit pour plus de réactivité)
 
     // Variables pour la détection robuste (consensus)
     let gestureHistory = []; // Historique des derniers gestes détectés
@@ -238,10 +239,20 @@ async function main() {
                         // Toutes les conditions sont remplies : exécuter l'action
                         let actionTaken = false;
 
-                        if (bestGesture.name === 'thumbs_up') {
+                        if (bestGesture.name === 'closed_fist') {
                             window.ChessGame.actionTriggered();
-                            debugInfo.innerText = `✅ VALIDATION !`;
+                            debugInfo.innerText = `✊ SAISIE / VALIDATION !`;
                             actionTaken = true;
+                        } else if (bestGesture.name === 'open_hand') {
+                            const cancelled = window.ChessGame.cancelMove();
+                            if (cancelled) {
+                                debugInfo.innerText = `✋ ANNULATION !`;
+                                actionTaken = true;
+                            } else {
+                                // Si rien n'est annulé (pas de pièce en main), on ne bloque pas le cooldown pour rien
+                                // Mais on affiche quand même le geste
+                                debugInfo.innerText = `✋ MAIN OUVERTE (Rien à annuler)`;
+                            }
                         } else if (bestGesture.name === 'up') {
                             window.ChessGame.moveCursor('up');
                             debugInfo.innerText = `⬆️ HAUT`;

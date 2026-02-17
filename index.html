@@ -25,6 +25,7 @@
                 <button id="diff-medium" class="active">Moyen</button>
                 <button id="diff-hard">Difficile</button>
             </div>
+            <button id="help-btn" class="help-btn">❓ Liste Mouvements</button>
             <button id="reset-game" class="reset-btn">🔄 Nouvelle Partie</button>
         </div>
 
@@ -46,6 +47,58 @@
 
         <div id="gesture-debug" style="margin-top: 10px; font-size: 0.9em; color: #aaa;">
             <!-- Affichage des gestes détectés -->
+        </div>
+    </div>
+
+    <!-- Modale d'Aide -->
+    <div id="help-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Guide des Mouvements 👋</h2>
+            <div class="gesture-list">
+                <div class="gesture-item">
+                    <span class="emoji">☝️</span>
+                    <div class="desc">
+                        <strong>Index Haut</strong>
+                        <p>Déplacer le curseur vers le HAUT</p>
+                    </div>
+                </div>
+                <div class="gesture-item">
+                    <span class="emoji">👇</span>
+                    <div class="desc">
+                        <strong>Index Bas</strong>
+                        <p>Déplacer le curseur vers le BAS</p>
+                    </div>
+                </div>
+                <div class="gesture-item">
+                    <span class="emoji">👈</span>
+                    <div class="desc">
+                        <strong>Index Gauche</strong>
+                        <p>Déplacer le curseur vers la GAUCHE</p>
+                    </div>
+                </div>
+                <div class="gesture-item">
+                    <span class="emoji">👉</span>
+                    <div class="desc">
+                        <strong>Index Droite</strong>
+                        <p>Déplacer le curseur vers la DROITE</p>
+                    </div>
+                </div>
+                <div class="gesture-item">
+                    <span class="emoji">✊</span>
+                    <div class="desc">
+                        <strong>Poing Fermé</strong>
+                        <p>VALIDER / Saisir une pièce / Déposer une pièce</p>
+                    </div>
+                </div>
+                <div class="gesture-item">
+                    <span class="emoji">✋</span>
+                    <div class="desc">
+                        <strong>Main Ouverte</strong>
+                        <p>ANNULER la sélection (repose la pièce)</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 

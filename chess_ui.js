@@ -126,6 +126,14 @@ function renderBoard() {
         console.log("ÉCHEC ET MAT !");
         const winner = game.turn() === 'w' ? 'Noirs' : 'Blancs';
         document.querySelector('h1').innerText = `ÉCHEC ET MAT ! Les ${winner} gagnent !`;
+        
+        // Alerte si le joueur gagne (les Blancs)
+        if (winner === 'Blancs') {
+            setTimeout(() => alert("Félicitations ! Vous avez gagné ! 🎉"), 100);
+        } else {
+             setTimeout(() => alert("Dommage ! Le bot a gagné. 🤖"), 100);
+        }
+
     } else if (game.in_draw()) {
         document.querySelector('h1').innerText = "PARTIE NULLE !";
     } else if (game.in_check()) {
@@ -171,12 +179,44 @@ function playBotMove() {
 
         if (result) {
             console.log('✅ Bot a joué:', result.san);
+            
+            // Téléportation sur la pièce blanche la plus proche du curseur actuel
+            const nearest = findNearestPiece(cursorPosition.row, cursorPosition.col, 'w');
+            if (nearest) {
+                cursorPosition = nearest;
+                console.log(`📍 Curseur téléporté sur la pièce la plus proche : ${toSquare(nearest.row, nearest.col)}`);
+            }
+
             renderBoard();
         } else {
             console.error('❌ Coup illégal du bot:', move);
             renderBoard();
         }
     });
+}
+
+// Trouver la pièce d'une couleur donnée la plus proche d'une position
+function findNearestPiece(targetRow, targetCol, color) {
+    const board = game.board();
+    let minDistance = Infinity;
+    let nearestPos = null;
+
+    for (let r = 0; r < BOARD_SIZE; r++) {
+        for (let c = 0; c < BOARD_SIZE; c++) {
+            const piece = board[r][c];
+            if (piece && piece.color === color) {
+                // Distance euclidienne
+                const dist = Math.sqrt(Math.pow(r - targetRow, 2) + Math.pow(c - targetCol, 2));
+                
+                // En cas d'égalité stricte, on garde la première trouvée (ordre de lecture : haut->bas, gauche->droite)
+                if (dist < minDistance) {
+                    minDistance = dist;
+                    nearestPos = { row: r, col: c };
+                }
+            }
+        }
+    }
+    return nearestPos;
 }
 
 // --- API de Contrôle ---
@@ -270,6 +310,27 @@ function resetGame() {
     console.log('🔄 Nouvelle partie');
 }
 
+// Annuler la sélection et téléporter le curseur sur la pièce source
+function cancelMove() {
+    if (selectedPosition) {
+        console.log("✋ Annulation du mouvement en cours...");
+        // Téléporter le curseur sur la pièce qui était sélectionnée
+        cursorPosition = { row: selectedPosition.row, col: selectedPosition.col };
+        // Désélectionner (comme ça on n'a pas besoin de revalider pour la poser, on la "lâche")
+        // Mais l'utilisateur a demandé "se retéléporter où il est sans avoir à retraverser".
+        // On garde la pièce "en main" ou on la lâche ? 
+        // "s'il change d'avis il peut alors se retéléporter où il est".
+        // Si je la lâche (selectedPosition = null), il doit la ressaisir pour jouer un autre coup.
+        // Si je la garde (selectedPosition != null), il est sur la case de départ avec la pièce en main.
+        // Pour "changer d'avis", le plus logique est de revenir à l'état "rien en main" sur la case de départ.
+        selectedPosition = null; 
+        
+        renderBoard();
+        return true; // Action effectuée
+    }
+    return false; // Rien à faire
+}
+
 // Initialisation
 initBoard();
 
@@ -294,10 +355,33 @@ document.getElementById('diff-hard').addEventListener('click', function() {
 
 document.getElementById('reset-game').addEventListener('click', resetGame);
 
+// --- Gestion de la Modale d'Aide ---
+const modal = document.getElementById('help-modal');
+const btn = document.getElementById('help-btn');
+const span = document.getElementsByClassName('close-btn')[0];
+
+// Ouvrir
+btn.onclick = function() {
+    modal.style.display = 'flex'; // Flex pour centrer
+}
+
+// Fermer (Croix)
+span.onclick = function() {
+    modal.style.display = 'none';
+}
+
+// Fermer (Clic extérieur)
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = 'none';
+    }
+}
+
 // Export
 window.ChessGame = {
     moveCursor,
     actionTriggered,
+    cancelMove, // Nouvelle fonction exposée
     resetGame,
     getGame: () => game // Exporter l'instance du jeu pour debug
 };
